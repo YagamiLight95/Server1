@@ -55,7 +55,7 @@ public class ServerController {
 		PreparedStatement ps = null;
 		int i = 0;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection("172.30.20.211", "sebastiano", System.getenv("MYSQL_PWD"));
 			String query = "select * from dbSeba.user where stato = ?";
 			ps = conn.prepareStatement(query);
