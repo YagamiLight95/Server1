@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import redis.clients.jedis.Jedis;
 
 
@@ -42,10 +43,10 @@ public class ServerController {
 	public Object getRequests(@PathVariable("alberto") String stato, @RequestParam("api-version") String apiVersion) throws InterruptedException, ExecutionException {
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		Future<ArrayList<User>> usersRetrieved = executor.submit(retrieveRequests);
+		while (!usersRetrieved.isDone()) {
 		Future<Integer> a = executor.submit(sendRequests);
-		while(a.isDone()) {
-			System.out.println(a);
 		}
+		
 		return "Richiesta presa in carico";
 		
 	}
