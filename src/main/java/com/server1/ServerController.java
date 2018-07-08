@@ -56,7 +56,7 @@ public class ServerController {
 		int i = 0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("172.17.0.5", "sebastiano", System.getenv("MYSQL_PWD"));
+			conn = DriverManager.getConnection("172.17.0.4", "sebastiano", System.getenv("MYSQL_PWD"));
 			String query = "select * from dbSeba.user where stato = ?";
 			ps = conn.prepareStatement(query);
 			ps.setString(1, "Disabled");
