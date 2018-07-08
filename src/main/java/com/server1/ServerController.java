@@ -43,9 +43,9 @@ public class ServerController {
 	public Object getRequests(@PathVariable("alberto") String stato, @RequestParam("api-version") String apiVersion) throws InterruptedException, ExecutionException {
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		Future<ArrayList<User>> usersRetrieved = executor.submit(retrieveRequests);
-		while (!usersRetrieved.isDone()) {
+		
 		Future<Integer> a = executor.submit(sendRequests);
-		}
+		
 		
 		return "Richiesta presa in carico";
 		
@@ -56,7 +56,7 @@ public class ServerController {
 		PreparedStatement ps = null;
 		int i = 0;
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection("172.30.20.211", "sebastiano", System.getenv("MYSQL_PWD"));
 			String query = "select * from dbSeba.user where stato = ?";
 			ps = conn.prepareStatement(query);
