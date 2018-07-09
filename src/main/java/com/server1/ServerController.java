@@ -43,13 +43,14 @@ public class ServerController {
 	public Object getRequests(@PathVariable("alberto") String stato, @RequestParam("api-version") String apiVersion) throws InterruptedException, ExecutionException {
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		System.out.println("Avvio Retriever");
-		Future<ArrayList<User>> usersRetrieved = executor.submit(retrieveRequests);
+		Future<Integer> usersRetrieved = executor.submit(retrieveRequests);
 		while(!usersRetrieved.isDone()) {
 			// Wait....
 		}
-		System.out.println("Avvio Sender");
-		Future<Integer> a = executor.submit(sendRequests);
-		
+		if(usersRetrieved.get()==2) {
+			System.out.println("Avvio Sender");
+			Future<Integer> a = executor.submit(sendRequests);
+		}
 		
 		return "Richiesta presa in carico";
 		
@@ -58,7 +59,6 @@ public class ServerController {
 	static Callable retrieveRequests = () -> {
 		Connection conn = null;
 		PreparedStatement ps = null;
-		int i = 0;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://172.30.20.211:3306/dbSeba", "sebastiano", System.getenv("MYSQL_PWD"));
@@ -79,7 +79,7 @@ public class ServerController {
 			if(ps != null)
 				ps.close();
 		}
-		return i;
+		return 2;
 	};
 	
 	static Callable sendRequests = () -> {
@@ -89,7 +89,7 @@ public class ServerController {
 
 			System.out.println(System.getenv("REDIS_PWD"));
 			jClient.connect();
-			for(int i = 0; i < users.size(); i++) {
+			for(int i = 0; i < users.size() && users.size() > 0; i++) {
 				System.out.println("Pusho e pubblicooooo");
 				User user = users.get(i);
 				jClient.lpush("Users", user.toString());
@@ -98,7 +98,7 @@ public class ServerController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return 2;
+		return 5;
 	};
 
 	@RequestMapping(value= "prova/", method = RequestMethod.GET)
