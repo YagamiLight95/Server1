@@ -67,9 +67,11 @@ public class ServerController {
 			ps.setString(1, "Disabled");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
+				System.out.println("Sono qui");
 				System.out.println(rs.getString(1) + " " + rs.getString(2) + " " +  rs.getString(3) + " " + rs.getString(4));
 				users.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
 			}
+			System.out.println("Sono fuori dal tunnel");
 			System.out.println(users.toString());
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -85,10 +87,11 @@ public class ServerController {
 	static Callable sendRequests = () -> {
 		try {
 			Jedis jClient = new Jedis("172.30.118.49", 6379);		
-			jClient.auth(System.getenv("REDIS_PWD"));
-
+			String verifica = jClient.auth(System.getenv("REDIS_PWD"));
+			System.out.println(verifica);
 			System.out.println(System.getenv("REDIS_PWD"));
 			jClient.connect();
+			System.out.println("Dimensione: " + users.size());
 			for(int i = 0; i < users.size() && users.size() > 0; i++) {
 				System.out.println("Pusho e pubblicooooo");
 				User user = users.get(i);
