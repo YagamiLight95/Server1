@@ -42,10 +42,12 @@ public class ServerController {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public Object getRequests(@PathVariable("alberto") String stato, @RequestParam("api-version") String apiVersion) throws InterruptedException, ExecutionException {
 		ExecutorService executor = Executors.newFixedThreadPool(10);
+		System.out.println("Avvio Retriever");
 		Future<ArrayList<User>> usersRetrieved = executor.submit(retrieveRequests);
 		while(!usersRetrieved.isDone()) {
 			// Wait....
 		}
+		System.out.println("Avvio Sender");
 		Future<Integer> a = executor.submit(sendRequests);
 		
 		
@@ -59,15 +61,14 @@ public class ServerController {
 		int i = 0;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String connection = "jdbc:mysql://172.30.20.211:3306/dbSeba";
-			conn = DriverManager.getConnection(connection, "sebastiano", System.getenv("MYSQL_PWD"));
+			conn = DriverManager.getConnection("jdbc:mysql://172.30.20.211:3306/dbSeba", "sebastiano", System.getenv("MYSQL_PWD"));
 			String query = "select * from user where stato = ?";
 			ps = conn.prepareStatement(query);
 			ps.setString(1, "Disabled");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
+				System.out.println(rs.getString(1) + " " + rs.getString(2) + " " +  rs.getString(3) + " " + rs.getString(4));
 				users.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
-				i++;
 			}
 			System.out.println(users.toString());
 		}catch(Exception e) {
