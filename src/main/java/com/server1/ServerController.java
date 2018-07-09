@@ -36,7 +36,7 @@ import redis.clients.jedis.Jedis;
 @RequestMapping("/")
 public class ServerController {
 	
-	static ArrayList<User> users;
+	static ArrayList<User> users = new ArrayList<User>();
 	
 	@RequestMapping(value= "request/{alberto}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.ACCEPTED)
@@ -88,9 +88,10 @@ public class ServerController {
 		try {
 			Jedis jClient = new Jedis("172.30.118.49", 6379);		
 			String verifica = jClient.auth(System.getenv("REDIS_PWD"));
+			jClient.connect();
 			System.out.println(verifica);
 			System.out.println(System.getenv("REDIS_PWD"));
-			jClient.connect();
+			
 			System.out.println("Dimensione: " + users.size());
 			for(int i = 0; i < users.size() && users.size() > 0; i++) {
 				System.out.println("Pusho e pubblicooooo");
