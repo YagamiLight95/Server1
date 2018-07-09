@@ -43,7 +43,9 @@ public class ServerController {
 	public Object getRequests(@PathVariable("alberto") String stato, @RequestParam("api-version") String apiVersion) throws InterruptedException, ExecutionException {
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		Future<ArrayList<User>> usersRetrieved = executor.submit(retrieveRequests);
-		
+		while(!usersRetrieved.isDone()) {
+			// Wait....
+		}
 		Future<Integer> a = executor.submit(sendRequests);
 		
 		
@@ -56,9 +58,10 @@ public class ServerController {
 		PreparedStatement ps = null;
 		int i = 0;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-			conn = DriverManager.getConnection("172.30.20.211", "sebastiano", System.getenv("MYSQL_PWD"));
-			String query = "select * from dbSeba.user where stato = ?";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String connection = "jdbc:mysql://172.30.20.211:3306/dbSeba";
+			conn = DriverManager.getConnection(connection, "sebastiano", System.getenv("MYSQL_PWD"));
+			String query = "select * from user where stato = ?";
 			ps = conn.prepareStatement(query);
 			ps.setString(1, "Disabled");
 			ResultSet rs = ps.executeQuery();
