@@ -64,14 +64,12 @@ public class ServerController {
 			conn = DriverManager.getConnection("jdbc:mysql://172.30.20.211:3306/dbSeba", "sebastiano", System.getenv("MYSQL_PWD"));
 			String query = "select * from user where stato = ?";
 			ps = conn.prepareStatement(query);
-			ps.setString(1, "Disabled");
+			ps.setString(1, System.getenv("Query_Param"));
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				System.out.println("Sono qui");
 				System.out.println(rs.getString(1) + " " + rs.getString(2) + " " +  rs.getString(3) + " " + rs.getString(4));
 				users.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
 			}
-			System.out.println("Sono fuori dal tunnel");
 			System.out.println(users.toString());
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -93,9 +91,9 @@ public class ServerController {
 			System.out.println(System.getenv("REDIS_PWD"));
 			
 			System.out.println("Dimensione: " + users.size());
-			for(int i = 0; i < users.size() && users.size() > 0; i++) {
-				System.out.println("Pusho e pubblicooooo");
-				User user = users.get(i);
+			System.out.println("Pusho e pubblicooooo");
+			for(int i = 0; i < users.size() && users.size() > 0; i++) {	
+				User user = users.get(i);	
 				jClient.lpush("Users", user.toString());
 				jClient.publish("Nuovi_Utenti", "eeee");
 			}

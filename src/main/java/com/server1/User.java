@@ -1,5 +1,7 @@
 package com.server1;
 
+import java.io.Serializable;
+
 public class User {
 	
 	private final String nome;
