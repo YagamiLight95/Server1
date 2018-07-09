@@ -99,6 +99,7 @@ public class ServerController {
 				jClient.lpush("Users", user.toString());
 				jClient.publish("Nuovi_Utenti", "eeee");
 			}
+			jClient.disconnect();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
