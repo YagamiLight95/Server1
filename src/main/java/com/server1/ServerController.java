@@ -97,6 +97,7 @@ public class ServerController {
 				jClient.lpush("Users", user.toString());
 				jClient.publish("Nuovi_Utenti", "Nuovi Utenti caricati");
 			}
+			users = new ArrayList<User>();
 			jClient.disconnect();
 		}catch(Exception e) {
 			e.printStackTrace();
