@@ -92,10 +92,10 @@ public class ServerController {
 			
 			System.out.println("Dimensione: " + users.size());
 			System.out.println("Pusho e pubblicooooo");
-			for(int i = 0; i < users.size() && users.size() > 0; i++) {	
+			for(int i = 0; i < users.size(); i++) {	
 				User user = users.get(i);	
 				jClient.lpush("Users", user.toString());
-				jClient.publish("Nuovi_Utenti", "eeee");
+				jClient.publish("Nuovi_Utenti", "Nuovi Utenti caricati");
 			}
 			jClient.disconnect();
 		}catch(Exception e) {
