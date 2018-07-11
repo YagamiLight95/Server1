@@ -85,7 +85,6 @@ public class ServerController {
 			ps.setString(4, user.getStatus());
 			ps.setString(5, "0");
 			rs = ps.executeUpdate();
-			cn.commit();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
