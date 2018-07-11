@@ -2,7 +2,7 @@ package com.server1;
 
 import java.io.Serializable;
 
-public class User {
+public class User implements Serializable{
 	
 	private final String nome;
 	private final String cognome;
